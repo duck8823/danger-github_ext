@@ -9,25 +9,20 @@ module Danger
   #
   # You should replace these comments with a public description of your library.
   #
-  # @example Ensure people are well warned about merging on Mondays
+  # @example Whether mergeable
   #
-  #          my_plugin.warn_on_mondays
+  #          github_ext.mergeable
   #
   # @see  /danger-github_ext
-  # @tags monday, weekends, time, rattata
+  # @tags
   #
   class DangerGithubExt < Plugin
 
-    # An attribute that you can read/write from your Dangerfile
-    #
-    # @return   [Array<String>]
-    attr_accessor :my_attribute
-
     # A method that you can call from your Dangerfile
-    # @return   [Array<String>]
+    # @return   [boolean]
     #
-    def warn_on_mondays
-      warn 'Trying to merge code on a Monday' if Date.today.wday == 1
+    def mergeable
+      github.pr_json.attrs[:mergeable_state] == 'clean' && github.pr_json.attrs[:mergeable]
     end
   end
 end
