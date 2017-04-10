@@ -16,7 +16,7 @@ module Danger
   # @see  /danger-github_ext
   # @tags
   #
-  class DangerGithubExt < Plugin
+  class DangerGithubExt < DangerfileGitHubPlugin
 
     # A method that you can call from your Dangerfile
     # @return   [boolean]

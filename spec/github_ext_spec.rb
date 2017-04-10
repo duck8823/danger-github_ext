@@ -3,7 +3,7 @@ require File.expand_path('../spec_helper', __FILE__)
 module Danger
   describe Danger::DangerGithubExt do
     it 'should be a plugin' do
-      expect(Danger::DangerGithubExt.new(nil)).to be_a Danger::Plugin
+      expect(Danger::DangerGithubExt.new(testing_dangerfile)).to be_a Danger::DangerfileGitHubPlugin
     end
 
     #
