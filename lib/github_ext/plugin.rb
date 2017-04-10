@@ -21,8 +21,24 @@ module Danger
     # A method that you can call from your Dangerfile
     # @return   [boolean]
     #
-    def mergeable
-      github.pr_json.attrs[:mergeable_state] == 'clean' && github.pr_json.attrs[:mergeable]
+    def mergeable?
+      self.pr_json.attrs[:mergeable_state] == 'clean' && github.pr_json.attrs[:mergeable]
+    end
+
+    def labels
+      self.api.labels_for_issue(pr_json[:head][:repo][:full_name], pr_json[:number]).map { |issue|
+        issue.name
+      }
+    end
+
+    def add_labels(labels)
+      self.api.add_labels_to_an_issue(pr_json[:head][:repo][:full_name], pr_json[:number], Array(labels))
+    end
+
+    def remove_labels(labels)
+      Array(labels).each do |label|
+        self.api.remove_label(pr_json[:head][:repo][:full_name], pr_json[:number], label)
+      end
     end
   end
 end
