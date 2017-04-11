@@ -18,6 +18,12 @@ module Danger
   #
   class DangerGithubExt < DangerfileGitHubPlugin
 
+    def initialize(dangerfile)
+      super(dangerfile)
+
+      self.api.auto_paginate = true
+    end
+
     # A method that you can call from your Dangerfile
     # @return   [boolean]
     #
@@ -39,6 +45,23 @@ module Danger
       Array(labels).each do |label|
         self.api.remove_label(pr_json[:head][:repo][:full_name], pr_json[:number], label)
       end
+    end
+
+    def statuses
+      @repo ||= self.pr_json.base.repo.full_name
+      @sha  ||= self.head_commit
+      statuses = {}
+      self.api.statuses(@repo, @sha).each do |status|
+        statuses[status.context] ||= []
+        statuses[status.context].push({
+                                          context: status.context,
+                                          state: status.state,
+                                          date: status.updated_at
+                                      })
+      end
+      statuses.map {|_, val|
+        val.sort{|a, b| b[:date] <=> a[:date] }[0]
+      }
     end
   end
 end
