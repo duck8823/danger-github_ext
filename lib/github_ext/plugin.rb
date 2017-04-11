@@ -32,18 +32,24 @@ module Danger
     end
 
     def labels
-      self.api.labels_for_issue(pr_json[:head][:repo][:full_name], pr_json[:number]).map { |issue|
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
+      self.api.labels_for_issue(@repo, @number).map { |issue|
         issue.name
       }
     end
 
     def add_labels(labels)
-      self.api.add_labels_to_an_issue(pr_json[:head][:repo][:full_name], pr_json[:number], Array(labels))
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
+      self.api.add_labels_to_an_issue(@repo, @number, Array(labels))
     end
 
     def remove_labels(labels)
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
       Array(labels).each do |label|
-        self.api.remove_label(pr_json[:head][:repo][:full_name], pr_json[:number], label)
+        self.api.remove_label(@repo, @number, label)
       end
     end
 
