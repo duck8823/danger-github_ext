@@ -1,20 +1,29 @@
 module Danger
-  # This is your plugin class. Any attributes or methods you expose here will
-  # be available from within your Dangerfile.
+  # This is Danger Plugin for GitHub extension.
+  # When installing this plugin, you can additional methods on github instance
   #
-  # To be published on the Danger plugins site, you will need to have
-  # the public interface documented. Danger uses [YARD](http://yardoc.org/)
-  # for generating documentation from your plugin source, and you can verify
-  # by running `danger plugins lint` or `bundle exec rake spec`.
+  # @example Determine if pull request is mergeable and mergeable status is clean
   #
-  # You should replace these comments with a public description of your library.
+  #          github.mergeable?
   #
-  # @example Whether mergeable
+  # @example List labels for the pull request
   #
-  #          github_ext.mergeable
+  #          github.labels
   #
-  # @see  /danger-github_ext
-  # @tags
+  # @example Add labels to the pull request
+  #
+  #          github.add_labels 'build ok'
+  #
+  # @example Remove labels from the pull request
+  #
+  #          github.remove_labels 'build failed'
+  #
+  # @example List current statuses for the head commit
+  #
+  #          github.statuses
+  #
+  # @see  duck8823/danger-github_ext
+  # @tags github
   #
   class DangerGithubExt < DangerfileGitHubPlugin
 
@@ -24,13 +33,16 @@ module Danger
       self.api.auto_paginate = true
     end
 
-    # A method that you can call from your Dangerfile
+    # Whether mergeable and mergeable status is clean
     # @return   [boolean]
     #
     def mergeable?
       self.pr_json.attrs[:mergeable_state] == 'clean' && github.pr_json.attrs[:mergeable]
     end
 
+    # Get labels
+    # @return   [[String]]
+    #
     def labels
       @repo ||= self.pr_json.base.repo.full_name
       @number ||= self.pr_json.number
@@ -39,12 +51,20 @@ module Danger
       }
     end
 
+    # add labels to pull request
+    # @param [[String]] labels
+    # @return [void]
+    #
     def add_labels(labels)
       @repo ||= self.pr_json.base.repo.full_name
       @number ||= self.pr_json.number
       self.api.add_labels_to_an_issue(@repo, @number, Array(labels))
     end
 
+    # remove labels from pull request
+    # @param [[String]] labels
+    # @return [void]
+    #
     def remove_labels(labels)
       @repo ||= self.pr_json.base.repo.full_name
       @number ||= self.pr_json.number
@@ -53,6 +73,9 @@ module Danger
       end
     end
 
+    # get current commit statuses
+    # @return [[Hash]]
+    #
     def statuses
       @repo ||= self.pr_json.base.repo.full_name
       @sha  ||= self.head_commit
