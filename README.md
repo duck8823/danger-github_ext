@@ -1,20 +1,51 @@
-# danger-github_ext
 
-A description of danger-github_ext.
 
-## Installation
+### github_ext
 
-    $ gem install danger-github_ext
+This is Danger Plugin for GitHub extension.
+When installing this plugin, you can additional methods on github instance
 
-## Usage
+<blockquote>Determine if pull request is mergeable and mergeable status is clean
+  <pre>
+github.mergeable?</pre>
+</blockquote>
 
-    Methods and attributes from this plugin are available in
-    your `Dangerfile` under the `github_ext` namespace.
+<blockquote>List labels for the pull request
+  <pre>
+github.labels</pre>
+</blockquote>
 
-## Development
+<blockquote>Add labels to the pull request
+  <pre>
+github.add_labels 'build ok'</pre>
+</blockquote>
 
-1. Clone this repo
-2. Run `bundle install` to setup dependencies.
-3. Run `bundle exec rake spec` to run the tests.
-4. Use `bundle exec guard` to automatically have tests run as you make changes.
-5. Make your changes.
+<blockquote>Remove labels from the pull request
+  <pre>
+github.remove_labels 'build failed'</pre>
+</blockquote>
+
+<blockquote>List current statuses for the head commit
+  <pre>
+github.statuses</pre>
+</blockquote>
+
+
+
+
+
+#### Methods
+
+`mergeable?` - Whether mergeable and mergeable status is clean
+
+`labels` - Get labels
+
+`add_labels` - add labels to pull request
+
+`remove_labels` - remove labels from pull request
+
+`statuses` - get current commit statuses
+
+
+
+
