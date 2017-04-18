@@ -30,6 +30,26 @@ github.remove_labels 'build failed'</pre>
 github.statuses</pre>
 </blockquote>
 
+<blockquote>Update the title of the pull request
+  <pre>
+github.update_pr_tile 'Updated title'</pre>
+</blockquote>
+
+<blockquote>Update the body of the pull request
+  <pre>
+github.update_pr_body 'Updated body'</pre>
+</blockquote>
+
+<blockquote>Close the pull request
+  <pre>
+github.close</pre>
+</blockquote>
+
+<blockquote>Open the pull request
+  <pre>
+github.open</pre>
+</blockquote>
+
 
 
 
@@ -45,6 +65,14 @@ github.statuses</pre>
 `remove_labels` - remove labels from pull request
 
 `statuses` - get current commit statuses
+
+`update_pr_title` - Update the title of the pull request
+
+`update_pr_body` - Update the body of pull request
+
+`close` - Close the pull request
+
+`open` - Open the pull request
 
 
 
