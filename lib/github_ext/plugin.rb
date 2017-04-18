@@ -22,6 +22,22 @@ module Danger
   #
   #          github.statuses
   #
+  # @example Update the title of the pull request
+  #
+  #          github.update_pr_tile 'Updated title'
+  #
+  # @example Update the body of the pull request
+  #
+  #          github.update_pr_body 'Updated body'
+  #
+  # @example Close the pull request
+  #
+  #          github.close
+  #
+  # @example Open the pull request
+  #
+  #          github.open
+  #
   # @see  duck8823/danger-github_ext
   # @tags github
   #
@@ -91,6 +107,42 @@ module Danger
       statuses.map {|_, val|
         val.sort{|a, b| b[:date] <=> a[:date] }[0]
       }
+    end
+
+    # Update the title of the pull request
+    # @return [Sawyer::Resource]
+    #
+    def update_pr_title(title)
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
+      self.api.update_pull_request(@repo, @number, {:title => title})
+    end
+
+    # Update the body of pull request
+    # @return [Sawyer::Resource]
+    #
+    def update_pr_body(body)
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
+      self.api.update_pull_request(@repo, @number, {:body => body})
+    end
+
+    # Close the pull request
+    # @return [Sawyer::Resource]
+    #
+    def close
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
+      self.api.update_pull_request(@repo, @number, {:state => 'closed'})
+    end
+
+    # Open the pull request
+    # @return [Sawyer::Resource]
+    #
+    def open
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
+      self.api.update_pull_request(@repo, @number, {:state => 'open'})
     end
   end
 end
