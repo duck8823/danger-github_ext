@@ -77,6 +77,19 @@ module Danger
       self.api.add_labels_to_an_issue(@repo, @number, Array(labels))
     end
 
+    # add label with color to pull request
+    # @param [String] label
+    # @param [String] color
+    # @return [void]
+    #
+    def add_label(label, color = 'ffffff')
+      @repo ||= self.pr_json.base.repo.full_name
+      @number ||= self.pr_json.number
+      self.api.update_label(@repo, label, {:color => color})
+      self.api.add_labels_to_an_issue(@repo, @number, Array(label))
+
+    end
+
     # remove labels from pull request
     # @param [[String]] labels
     # @return [void]
