@@ -58,6 +58,7 @@ module Danger
 
     # Get labels
     # @return   [[String]]
+    # @deprecated Please use {#pr_labels} instead
     #
     def labels
       @repo ||= self.pr_json.base.repo.full_name
