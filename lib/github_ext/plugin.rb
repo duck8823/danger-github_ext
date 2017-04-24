@@ -49,14 +49,14 @@ module Danger
       self.api.auto_paginate = true
     end
 
-    # Whether mergeable and mergeable status is clean
+    # Determine if pull request is mergeable and mergeable status is clean
     # @return   [boolean]
     #
     def mergeable?
       self.pr_json.attrs[:mergeable_state] == 'clean' && github.pr_json.attrs[:mergeable]
     end
 
-    # Get labels
+    # List labels for the pull request
     # @return   [[String]]
     # @deprecated Please use {#pr_labels} instead
     #
@@ -68,7 +68,7 @@ module Danger
       }
     end
 
-    # add labels to pull request
+    # Add labels to the pull request
     # @param [[String]] labels
     # @return [void]
     #
@@ -78,7 +78,7 @@ module Danger
       self.api.add_labels_to_an_issue(@repo, @number, Array(labels))
     end
 
-    # add label with color to pull request
+    # Add label with color to the pull request
     # @param [String] label
     # @param [String] color
     # @return [void]
@@ -91,7 +91,7 @@ module Danger
 
     end
 
-    # remove labels from pull request
+    # Remove labels from the pull request
     # @param [[String]] labels
     # @return [void]
     #
@@ -103,7 +103,7 @@ module Danger
       end
     end
 
-    # get current commit statuses
+    # List current statuses for the head commit
     # @return [[Hash]]
     #
     def statuses
