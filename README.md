@@ -56,15 +56,17 @@ github.open</pre>
 
 #### Methods
 
-`mergeable?` - Whether mergeable and mergeable status is clean
+`mergeable?` - Determine if pull request is mergeable and mergeable status is clean
 
-`labels` - Get labels
+`labels` - List labels for the pull request
 
-`add_labels` - add labels to pull request
+`add_labels` - Add labels to the pull request
 
-`remove_labels` - remove labels from pull request
+`add_label` - Add label with color to the pull request
 
-`statuses` - get current commit statuses
+`remove_labels` - Remove labels from the pull request
+
+`statuses` - List current statuses for the head commit
 
 `update_pr_title` - Update the title of the pull request
 
