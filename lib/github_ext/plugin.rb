@@ -141,22 +141,13 @@ module Danger
       self.api.update_pull_request(@repo, @number, {:body => body})
     end
 
-    # Close the pull request
+    # Update the pull request state
     # @return [Sawyer::Resource]
     #
-    def close
+    def update_pr_state(state)
       @repo ||= self.pr_json.base.repo.full_name
       @number ||= self.pr_json.number
-      self.api.update_pull_request(@repo, @number, {:state => 'closed'})
-    end
-
-    # Open the pull request
-    # @return [Sawyer::Resource]
-    #
-    def open
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
-      self.api.update_pull_request(@repo, @number, {:state => 'open'})
+      self.api.update_pull_request(@repo, @number, {:state => state})
     end
   end
 end
