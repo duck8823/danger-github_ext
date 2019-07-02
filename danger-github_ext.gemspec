@@ -1,4 +1,5 @@
 # coding: utf-8
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'github_ext/gem_version.rb'
@@ -8,12 +9,12 @@ Gem::Specification.new do |spec|
   spec.version       = GithubExt::VERSION
   spec.authors       = ['']
   spec.email         = ['']
-  spec.description   = %q{A short description of danger-github_ext.}
-  spec.summary       = %q{A longer description of danger-github_ext.}
+  spec.description   = 'A short description of danger-github_ext.'
+  spec.summary       = 'A longer description of danger-github_ext.'
   spec.homepage      = 'https://github.com//danger-github_ext'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files`.split($/)
+  spec.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
@@ -28,8 +29,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.4'
 
   # Linting code and docs
-  spec.add_development_dependency "rubocop", "~> 0.49.0"
-  spec.add_development_dependency "yard", "~> 0.9.11"
+  spec.add_development_dependency 'rubocop', '~> 0.49.0'
+  spec.add_development_dependency 'yard', '~> 0.9.11'
 
   # Makes testing easy via `bundle exec guard`
   spec.add_development_dependency 'guard', '~> 2.14'
