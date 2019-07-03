@@ -42,18 +42,17 @@ module Danger
   # @tags github
   #
   class DangerGithubExt < DangerfileGitHubPlugin
-
     def initialize(dangerfile)
       super(dangerfile)
 
-      self.api.auto_paginate = true
+      api.auto_paginate = true
     end
 
     # Determine if pull request is mergeable and mergeable status is clean
     # @return   [boolean]
     #
     def mergeable?
-      self.pr_json.attrs[:mergeable_state] == 'clean' && github.pr_json.attrs[:mergeable]
+      pr_json.attrs[:mergeable_state] == 'clean' && github.pr_json.attrs[:mergeable]
     end
 
     # List labels for the pull request
@@ -61,11 +60,9 @@ module Danger
     # @deprecated Please use {#pr_labels} instead
     #
     def labels
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
-      self.api.labels_for_issue(@repo, @number).map { |issue|
-        issue.name
-      }
+      @repo ||= pr_json.base.repo.full_name
+      @number ||= pr_json.number
+      api.labels_for_issue(@repo, @number).map(&:name)
     end
 
     # Add labels to the pull request
@@ -73,9 +70,9 @@ module Danger
     # @return [void]
     #
     def add_labels(labels)
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
-      self.api.add_labels_to_an_issue(@repo, @number, Array(labels))
+      @repo ||= pr_json.base.repo.full_name
+      @number ||= pr_json.number
+      api.add_labels_to_an_issue(@repo, @number, Array(labels))
     end
 
     # Add label with color to the pull request
@@ -84,11 +81,10 @@ module Danger
     # @return [void]
     #
     def add_label(label, color = 'ffffff')
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
-      self.api.update_label(@repo, label, {:color => color})
-      self.api.add_labels_to_an_issue(@repo, @number, Array(label))
-
+      @repo ||= pr_json.base.repo.full_name
+      @number ||= pr_json.number
+      api.update_label(@repo, label, color: color)
+      api.add_labels_to_an_issue(@repo, @number, Array(label))
     end
 
     # Remove labels from the pull request
@@ -96,10 +92,10 @@ module Danger
     # @return [void]
     #
     def remove_labels(labels)
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
+      @repo ||= pr_json.base.repo.full_name
+      @number ||= pr_json.number
       Array(labels).each do |label|
-        self.api.remove_label(@repo, @number, label)
+        api.remove_label(@repo, @number, label)
       end
     end
 
@@ -107,47 +103,45 @@ module Danger
     # @return [[Hash]]
     #
     def statuses
-      @repo ||= self.pr_json.base.repo.full_name
-      @sha  ||= self.head_commit
+      @repo ||= pr_json.base.repo.full_name
+      @sha  ||= head_commit
       statuses = {}
-      self.api.statuses(@repo, @sha).each do |status|
+      api.statuses(@repo, @sha).each do |status|
         statuses[status.context] ||= []
-        statuses[status.context].push({
-                                          context: status.context,
-                                          state: status.state,
-                                          date: status.updated_at
-                                      })
+        statuses[status.context].push(context: status.context,
+                                      state: status.state,
+                                      date: status.updated_at)
       end
-      statuses.map {|_, val|
-        val.sort{|a, b| b[:date] <=> a[:date] }[0]
-      }
+      statuses.map do |_, val|
+        val.sort { |a, b| b[:date] <=> a[:date] }[0]
+      end
     end
 
     # Update the title of the pull request
     # @return [Sawyer::Resource]
     #
     def update_pr_title(title)
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
-      self.api.update_pull_request(@repo, @number, {:title => title})
+      @repo ||= pr_json.base.repo.full_name
+      @number ||= pr_json.number
+      api.update_pull_request(@repo, @number, title: title)
     end
 
     # Update the body of pull request
     # @return [Sawyer::Resource]
     #
     def update_pr_body(body)
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
-      self.api.update_pull_request(@repo, @number, {:body => body})
+      @repo ||= pr_json.base.repo.full_name
+      @number ||= pr_json.number
+      api.update_pull_request(@repo, @number, body: body)
     end
 
     # Update the pull request state
     # @return [Sawyer::Resource]
     #
     def update_pr_state(state)
-      @repo ||= self.pr_json.base.repo.full_name
-      @number ||= self.pr_json.number
-      self.api.update_pull_request(@repo, @number, {:state => state})
+      @repo ||= pr_json.base.repo.full_name
+      @number ||= pr_json.number
+      api.update_pull_request(@repo, @number, state: state)
     end
   end
 end
